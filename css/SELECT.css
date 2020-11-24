@@ -1,0 +1,32 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+header {
+	background:  url(../Image/background.png);
+	height: 100vh;
+	-webkit-background-size: cover;
+	background-size: cover;
+	background-position: center center;
+	position: relative;
+}
+.logo img {
+	position: relative;
+	top:60px;
+	right: -25%;
+}
+
+table{
+	width:100%;
+	margin-top:100px;
+}
+
+button{
+	display:block;
+	margin-left:auto;
+	margin-right:auto;
+	font-size:40px;
+	border: solid 5
+px white;
+	background:  url(../Image/background.png);
+}

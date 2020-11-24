@@ -1,0 +1,63 @@
+
+
+* {
+	margin: 0;
+	padding: 0;
+}
+body {
+	font-family: 'Poppins', sans-serif;
+}
+
+header {
+	background:  url(../Image/background.png);
+	height: 100vh;
+	-webkit-background-size: cover;
+	background-size: cover;
+	background-position: center center;
+	position: relative;
+}
+header h1{
+	text-align: center;
+}
+header form input{
+	width: 350px;
+	height: 30px;
+	font-size:22px;
+	font-family: Verdana,DFKai-sb;
+}
+header form button{
+	width: 50px;
+	height: 30px;
+	font-size:20px;
+	font-family: DFKai-sb;
+}
+
+.logo img {
+	position: relative;
+	top:60px;
+	right: -25%;
+}
+
+/*resposive*/
+
+@media (max-width:400px) {
+
+	.logo {
+		float: none;
+		width: 50%;
+		text-align: center;
+		margin: auto;
+	}
+	.nav-area {
+		float: none;
+		margin-top: 0;
+	}
+	.nav-area li a {
+		padding: 5px;
+		font-size: 11px;
+	}
+	.nav-area {
+		text-align: center;
+	}
+
+}
