@@ -1,0 +1,24 @@
+{
+  "name": "NCYU-MIS-NO1-Os",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shiao-Red/NCYU-MIS-NO1-Os.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shiao-Red/NCYU-MIS-NO1-Os/issues"
+  },
+  "homepage": "https://github.com/Shiao-Red/NCYU-MIS-NO1-Os#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^3.0.3"
+  }
+}
