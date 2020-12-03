@@ -16,14 +16,22 @@ app.use(session({
 
 app.get('/', (req, res) => {
     res.sendFile( __dirname + '/LOGIN.html');
-	req.session.ok='123';
+	//req.session.ok='123';
 	
 	console.log(req.session.ok);
+});
+
+app.get('/game1.html', (req, res)=>{
+	res.sendFile(__dirname+'/game1.html');
+	
 });
 
 io.on('connection', (socket)=>{
 	console.log('yep');
 	
+	socket.on('clientCanvas', (data)=>{
+		io.emit('serverCanvas', data);
+	});
 	socket.on('disconnect',()=>{
 	});
 });

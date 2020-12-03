@@ -1,7 +1,7 @@
 // JavaScript source code
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-
+const socket=io();
 let paintColor;
 let colorButton = document.getElementsByClassName('colorButton');
 
@@ -20,6 +20,12 @@ const moveEvent = hasTouchEvent ? 'ontouchmove' : 'mousemove';
 const upEvent = hasTouchEvent ? 'touchend' : 'mouseup';
 
 let isMouseActive = false;
+
+function sendCanvas(){
+	let canvasContents=canvas.toDataURL();
+	//let canvasJSON=JSON.stringify(canvasContents);
+	socket.emit('clientCanvas', canvasContents);
+}
 
 canvas.addEventListener(downEvent, function (e) {
     isMouseActive = true;
@@ -54,13 +60,16 @@ canvas.addEventListener(moveEvent, function (e) {
     // 更新起始點座標
     x1 = x2;
     y1 = y2;
+	
+	
 })
 
 canvas.addEventListener(upEvent, function (e) {
     isMouseActive = false;
+	sendCanvas();
 })
 
-function rgbToHex(rgb) {
+function rgbToHex(rgb) {  //變換顏色的功能
     let returnString="#";
     rgb = rgb.slice(4, -1);
     rgb=rgb.split(',');
@@ -78,11 +87,17 @@ function rgbToHex(rgb) {
     return returnString;
 }
 
-for (let button of colorButton) {
-
+for (let button of colorButton) {//換顏色部份
     button.addEventListener('click', () => {
         let tmpString = window.getComputedStyle(button, null).backgroundColor;
         paintColor = rgbToHex(tmpString);
     });
 }
 
+socket.on('serverCanvas', (data)=>{
+	let image=new Image();
+	image.onload=function(){
+		ctx.drawImage(image, 0, 0);
+	}
+	image.src=data;
+});
