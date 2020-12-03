@@ -5,6 +5,13 @@ const io=require('socket.io')(server);
 const session = require('express-session');
 const cookieParser=require('cookie-parser');
 
+var allUsers=new Set();
+/*
+這個是用來記錄有哪些名字
+Node js 的 Set 使用方法:
+https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Set
+*/
+
 app.use(express.static(__dirname+'/public')); //我們要用到的那些 css js jpg,寫這行後，他們才可以用
 app.use(session({
 	secret:'12345', //session 好像要配合cookie用
@@ -15,16 +22,36 @@ app.use(session({
 }));
 
 app.get('/', (req, res) => {
+	//req.query可以得到get的參數
     res.sendFile( __dirname + '/LOGIN.html');
 	//req.session.ok='123';
 	
-	console.log(req.session.ok);
+	console.log(req.query);
 });
 
 app.get('/game1.html', (req, res)=>{
 	res.sendFile(__dirname+'/game1.html');
-	
 });
+
+app.get('/queryUserName', (req, res)=>{
+	/*
+	給 LOGIN.html 的 ajax 用，使用者在輸入的當下
+	就能知道這名字是不是有人用了
+	*/
+	let userName=req.query.userName;
+	console.log(req.query.userName);
+	
+	if(!allUsers.has(userName)){
+		res.send('ok');
+	}
+	
+	res.end();
+});
+
+/*
+express如何創聊天室
+https://socket.io/docs/v3/rooms/index.html
+*/
 
 io.on('connection', (socket)=>{
 	console.log('yep');
@@ -32,7 +59,12 @@ io.on('connection', (socket)=>{
 	socket.on('clientCanvas', (data)=>{
 		io.emit('serverCanvas', data);
 	});
+	
 	socket.on('disconnect',()=>{
+	});
+	
+	socket.on('disconnecting', ()=>{
+		console.log(socket.rooms);
 	});
 });
 
