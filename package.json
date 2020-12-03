@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/Shiao-Red/NCYU-MIS-NO1-Os#readme",
   "dependencies": {
+    "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "socket.io": "^3.0.3"
   }
 }
