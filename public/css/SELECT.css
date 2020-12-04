@@ -10,6 +10,7 @@ header {
 	background-position: center center;
 	position: relative;
 }
+
 .logo img {
 	position: relative;
 	top:60px;
@@ -21,12 +22,11 @@ table{
 	margin-top:100px;
 }
 
-button{
+.selectButton{
 	display:block;
 	margin-left:auto;
 	margin-right:auto;
 	font-size:40px;
-	border: solid 5
-px white;
+	border: solid 5px white;
 	background:  url(../Image/background.png);
 }
