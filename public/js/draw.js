@@ -19,17 +19,11 @@ const downEvent = hasTouchEvent ? 'ontouchstart' : 'mousedown';
 const moveEvent = hasTouchEvent ? 'ontouchmove' : 'mousemove';
 const upEvent = hasTouchEvent ? 'touchend' : 'mouseup';
 
-let isMouseActive = false;
-
 function sendCanvas(){
 	let canvasContents=canvas.toDataURL();
 	//let canvasJSON=JSON.stringify(canvasContents);
 	socket.emit('clientCanvas', canvasContents);
 }
-
-canvas.addEventListener(downEvent, function (e) {
-    isMouseActive = true;
-})
 
 canvas.addEventListener(downEvent, function (e) {
 

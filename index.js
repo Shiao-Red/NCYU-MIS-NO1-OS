@@ -27,9 +27,9 @@ app.use(session({
 }));
 
 app.get('/', (req, res) => {
+	console.log(allUsers);
 	//req.query可以得到get的參數
-	console.log(req.session.userName);
-    res.sendFile( __dirname + '/LOGIN.html');
+    res.sendFile( __dirname + '/Login.html');
 	//req.session.ok='123';
 });
 
@@ -54,7 +54,7 @@ app.get('/queryUserName', (req, res)=>{
 	res.end();
 });
 
-app.get('/SELECT.html', (req, res)=>{
+app.get('/Select.html', (req, res)=>{
 	/*
 		使用者剛進入網頁時，要用 session
 		記錄現在有多少人
@@ -83,7 +83,6 @@ io.on('connection', (socket)=>{
 	/*
 		socket 的部份
 	*/
-	console.log('yep');
 	
 	socket.on('clientCanvas', (data)=>{
 		io.emit('serverCanvas', data);
