@@ -19,6 +19,8 @@ const downEvent = hasTouchEvent ? 'ontouchstart' : 'mousedown';
 const moveEvent = hasTouchEvent ? 'ontouchmove' : 'mousemove';
 const upEvent = hasTouchEvent ? 'touchend' : 'mouseup';
 
+var isMouseActive=false;
+
 function sendCanvas(){
 	let canvasContents=canvas.toDataURL();
 	//let canvasJSON=JSON.stringify(canvasContents);
@@ -87,6 +89,10 @@ for (let button of colorButton) {//´«ÃC¦â³¡¥÷
         paintColor = rgbToHex(tmpString);
     });
 }
+
+socket.on('isUserOrHost', (data)=>{
+	console.log(data);
+});
 
 socket.on('serverCanvas', (data)=>{
 	let image=new Image();

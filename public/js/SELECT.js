@@ -6,11 +6,12 @@
 			let clickedBtn=event.srcElement.innerText;
 			
 			switch(clickedBtn){
-				case '一對一聊天':
-					console.log(1);
+				case '新建房間':
+					$.get('createRoom');
+					window.location='game1.html';
 					break;
-				case '群組聊天':
-					console.log(2);
+				case '加入房間':
+					window.location='GameRoomList.html';
 					break;
 				case '遊戲排行榜':
 					console.log(3);
