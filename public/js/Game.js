@@ -1,9 +1,15 @@
-// JavaScript source code
+ï»¿// JavaScript source code
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-const socket=io();
-let paintColor;
-let colorButton = document.getElementsByClassName('colorButton');
+const socket=new io();
+
+
+var paintColor;
+var colorButton = document.getElementsByClassName('colorButton');
+var isGuestOrHostInput=document.getElementById('isGuestOrHost');
+var attendedRoomInput=document.getElementById('attendedRoom');
+var messageInput=document.getElementById('messageInput');
+var messageButton=document.getElementById('messageButton');
 
 //°_©lÂI
 let x1 = 0;
@@ -63,7 +69,13 @@ canvas.addEventListener(moveEvent, function (e) {
 canvas.addEventListener(upEvent, function (e) {
     isMouseActive = false;
 	sendCanvas();
-})
+});
+
+messageButton.addEventListener('click', ()=>{
+	if(messageInput.value === '') return;
+	
+	socket.emit('clientMessage', messageInput.value);
+});
 
 function rgbToHex(rgb) {  //ÅÜ´«ÃC¦âªº¥\¯à
     let returnString="#";
@@ -90,8 +102,22 @@ for (let button of colorButton) {//´«ÃC¦â³¡¥÷
     });
 }
 
-socket.on('isUserOrHost', (data)=>{
+socket.on('isGuestOrHost', (data)=>{
 	console.log(data);
+	if(isGuestOrHostInput.value === '' || attendedRoomInput.value === ''){
+		isGuestOrHostInput.value=data.isGuestOrHost;
+		attendedRoomInput.value=data.attendedRoom;
+	}
+	
+});
+
+socket.on('serverMessage', (data)=>{
+	alert(data);
+});
+
+socket.on('hostCloseRoom', ()=>{
+	alert('æˆ¿ä¸»å·²ç¶“é›¢é–‹äº†');
+	window.location=('Select.html');
 });
 
 socket.on('serverCanvas', (data)=>{

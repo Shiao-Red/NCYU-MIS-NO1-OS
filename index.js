@@ -1,4 +1,4 @@
-const express=require('express');
+ï»¿const express=require('express');
 const app=express();
 const server=require('http').Server(app);
 const io=require('socket.io')(server);
@@ -17,14 +17,14 @@ io.use(function(socket, next) {
   sessionMiddleware(socket.request, socket.request.res, next);
 });
 /*
-³o¬O¦p¦óÅý socket ¸Ì­± also ¥i¥HÅª¨ì session
+é€™å€‹å¯ä»¥è®“ session åœ¨ socket è£¡é¢è¢«å­˜åˆ°
 https://stackoverflow.com/questions/32025173/nodejs-access-sessions-inside-socket
 */
 
 /*
-­ì¥»session³]©wªº¼gªk¡A¤£¹L³Q¨ú¥N¤F¡A¬Ý¬Ý¤§«áÁÙ·|¤£·|¥Î¨ì
+æˆ‘åŽŸæœ¬é‚£å€‹sessionçš„å¯«æ³•ï¼Œä¸éŽè¢«å–ä»£äº†ï¼Œçœ‹çœ‹ä¹‹å¾Œæœƒä¸æœƒç”¨åˆ°
 app.use(session({
-	secret:'12345', //session ¦n¹³­n°t¦Xcookie¥Î
+	secret:'12345',
 	name:'testapp',
 	cookie:{maxAge:80000},
 	resave:false,
@@ -34,8 +34,8 @@ app.use(session({
 
 app.use(sessionMiddleware);
 /*
-³o­Ó¬O¥Î¨Ó°O¿ý¦³­þ¨Ç¦W¦r
-Node js ªº Set ¨Ï¥Î¤èªk:
+ç”¨ Set ä¾†è¨˜æœ‰ä»€éº¼äºº
+Node js çš„ Set ä½¿ç”¨æ–¹æ³•
 https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Set
 */
 
@@ -44,15 +44,20 @@ io.use(function(socket, next) {
   sessionMiddleware(socket.request, socket.request.res, next);
 });
 /*
-§Ú­Ì­n¥Î¨ìªº¨º¨Ç css js jpg,¼g³o¦æ«á¡A¥L­Ì¤~¥i¥H¥Î
-node.js ªº cookie ¸ò session:
 https://cythilya.github.io/2015/08/18/node-cookie-and-session/
+*/
+
+
+/*
+	é€™äº›æ˜¯æœƒç”¨åˆ°çš„ session
+	userName:è‡ªå·±çš„åç¨±
+	attendedRoom:åŠ å…¥çš„èŠå¤©å®¤ï¼Œå¦‚å¦‚ attendedRoom === userName
+	è¡¨ç¤ºè‡ªå·±å°±æ˜¯æˆ¿ä¸»
 */
 
 app.get('/queryUserName', (req, res)=>{
 	/*
-	µ¹ LOGIN.html ªº ajax ¥Î¡A¨Ï¥ÎªÌ¦b¿é¤Jªº·í¤U
-	´N¯àª¾¹D³o¦W¦r¬O¤£¬O¦³¤H¥Î¤F
+	å¯ä»¥è®“ä½¿ç”¨è€…åœ¨è¼¸å…¥æ™‚ï¼Œå°±çŸ¥é“é€™åå­—æœ‰æ²’æœ‰äººä½¿ç”¨
 	*/
 	let userName=req.query.userName;
 	
@@ -67,54 +72,81 @@ app.get('/queryUserName', (req, res)=>{
 });
 
 app.get('/queryRooms', (req, res)=>{
-	console.log(allRooms);
-	res.send(Array.from(allRooms));//Âà¦¨ array ¦A¶Ç°e¹L¥h
+	res.send(Array.from(allRooms));//ç¾æœ‰çš„æˆ¿é–“ï¼Œä»¥é™£åˆ—ä¾†å‚³é€
 	res.end();
+});
+
+app.get('/isRoomAlive', (req, res)=>{
+	if(allRooms.has(req.query.Room)){
+		res.send('yes');
+	}
+	else{
+		res.send('no');
+	}
+	res.end()
 });
 
 app.get('/logout', (req, res)=>{
 	allUsers.delete(req.session.userName);
-	//§R±¼¦³ªº¤H
-	console.log(allUsers);
+	//ç™»å‡ºä½œæ¥­
 	req.session.destroy();
-	//§R±¼ session
+	//æ¸…é™¤ session
 	res.end();
 });
 
 app.get('/createRoom', (req, res)=>{
 	allRooms.add(req.session.userName);
+	req.session.attendedRoom=req.session.userName; //å‰µå»ºæˆ¿é–“çš„session
+	res.end();
 });
 
 
 
 app.get('/', (req, res) => {
-	console.log(allUsers);
-	//req.query¥i¥H±o¨ìgetªº°Ñ¼Æ
+	//req.queryå¯ä»¥å¾—åˆ° parameters
 	if(!req.session.userName){
 		res.sendFile( __dirname + '/Login.html');
 	}
 	else{
 		res.sendFile(__dirname+'/Select.html');
 	}
-    
-	//req.session.ok='123';
 });
 
-app.get('/game1.html', (req, res)=>{
-	res.sendFile(__dirname+'/game1.html');
+app.get('/Game.html', (req, res)=>{
+	if(!req.session.userName){
+		res.sendFile( __dirname + '/Login.html');
+		return;
+	}
+	/*
+		å¦‚æžœæ˜¯ä»¥ Guest é€²å…¥çš„è©±ï¼Œé è¨­æ˜¯æ²’æœ‰ attendedRoomï¼Œ
+		Guest æœƒåœ¨ GameRoomList ä»¥ get é€ Room çš„åƒæ•¸ä¾†å‘ŠçŸ¥
+		å®ƒåŠ å…¥çš„æ˜¯å“ªå€‹æˆ¿é–“
+	*/
+	
+	console.log(`game.html?room=${req.query.Room}`);
+	if(req.query.Room){
+		req.session.attendedRoom=req.query.Room;
+	}
+	
+	res.sendFile(__dirname+'/Game.html');
 });
 
 app.get('/Select.html', (req, res)=>{
 	/*
-		¨Ï¥ÎªÌ­è¶i¤Jºô­¶®É¡A­n¥Î session
-		°O¿ý²{¦b¦³¦h¤Ö¤H
+		é¸å–®çš„ html 
 	*/
-	if(!req.session.userName){
+	if(req.query.userName){
 		req.session.userName=req.query.userName;
 		allUsers.add(req.session.userName);
+		res.sendFile(__dirname+'/Select.html');
 	}
-	
-	res.sendFile(__dirname+'/SELECT.html');
+	else if(req.session.userName){
+		req.session.attendedRoom=undefined;
+		res.sendFile(__dirname+'/Select.html');
+	}
+	else{
+		res.sendFile(__dirname+'/Login.html');
+	}
 });
 
 app.get('/GameRoomList.html', (req, res)=>{
@@ -122,36 +154,47 @@ app.get('/GameRoomList.html', (req, res)=>{
 });
 
 /*
-express¦p¦ó³Ð²á¤Ñ«Ç
+expresså‰µé€  room çš„æ–¹æ³•
 https://socket.io/docs/v3/rooms/index.html
 */
 
 io.on('connection', (socket)=>{
-	//socket ªº³¡¥÷
+	//socket çš„ç¨‹å¼
 
-	let isUserOrHost;
-	let userName=socket.request.session.userName;
+	let isGuestOrHost;
 	
-	if(allRooms.has(userName)){
-		isUserOrHost='host'
+	if(allRooms.has(socket.request.session.userName)){
+	//å¦‚æžœé€™äººæœ‰å‰µæˆ¿çš„è©±ï¼ŒallRooms è£¡å°±æœƒæœ‰ä»–çš„åå­—
+		isGuestOrHost='host'
 	}
 	else{
-		isUserOrHost='user'
+		isGuestOrHost='guest'
 	}
 	
-	io.emit('isUserOrHost', isUserOrHost);
+	socket.join(socket.request.session.attendedRoom); //åŠ å…¥æˆ¿é–“
+	console.log(`attendedRoom = ${socket.request.session.attendedRoom}`);
+	
+	io.to(socket.request.session.attendedRoom).emit('isGuestOrHost', {isGuestOrHost:isGuestOrHost, attendedRoom:socket.request.session.attendedRoom});
+	//è®“ client ç«¯çŸ¥é“è‡ªå·±æ˜¯ host or guest
+	//é‚„æœ‰åŠ å…¥çš„æˆ¿é–“æ˜¯å“ªå€‹
 	
 	socket.on('clientCanvas', (data)=>{
 		io.emit('serverCanvas', data);
 	});
 	
+	socket.on('clientMessage', (data)=>{
+		io.to(socket.request.session.attendedRoom).emit('serverMessage', data);
+	});
+	
 	socket.on('disconnect',()=>{
-		if(isUserOrHost === 'host'){
-			allRooms.delete(userName);
+		if(isGuestOrHost === 'host'){ //æ˜¯hostçš„è©±ï¼Œé‚„è¦æ¸…é™¤æˆ¿é–“
+			io.to(socket.request.session.attendedRoom).emit('hostCloseRoom');
+			allRooms.delete(socket.request.session.userName);
 		}
+		socket.leave(socket.request.session.attendedRoom); //é›¢é–‹æˆ¿é–“
 	});
 });
 
-server.listen(3000, ()=>{
+server.listen(80, ()=>{
 	console.log('start');
 });

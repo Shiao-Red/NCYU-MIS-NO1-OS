@@ -8,7 +8,7 @@
 			switch(clickedBtn){
 				case '新建房間':
 					$.get('createRoom');
-					window.location='game1.html';
+					window.location='Game.html';
 					break;
 				case '加入房間':
 					window.location='GameRoomList.html';

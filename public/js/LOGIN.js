@@ -1,4 +1,4 @@
-window.onload=function(){
+﻿window.onload=function(){
 	var isInputOk;
 	var button=document.getElementsByTagName('button')[0];
 	var text=document.getElementsByTagName('input')[0];
