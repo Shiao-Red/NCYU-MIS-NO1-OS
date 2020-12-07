@@ -1,0 +1,51 @@
+table{
+	border:2px solid black;
+}
+tr, td{
+	border:2px solid black;
+}
+
+.color-button{
+	width:40px;
+	height:40px;
+	border:3px black solid;
+}
+
+.canvas{
+	border:1px solid black;
+}
+
+.eraser-button{
+	width:80px;
+	height:84px;
+	border:3px black solid;
+	background-image:url(/Image/eraser.jpeg);
+	background-size:contain;
+	background-position: 0px 5px;
+	background-color:#FFFFFF;
+}
+
+.color-button:nth-child(1){
+	background-color:#000000;
+}
+.color-button:nth-child(2){
+	background-color:#0000C6;
+}
+.color-button:nth-child(3){
+	background-color:#FF0000;
+}
+.color-button:nth-child(4){
+	background-color:#FF359A;
+}
+.color-button:nth-child(5){
+	background-color:#00FFFF;
+}
+.color-button:nth-child(6){
+	background-color:#00BB00;
+}
+.color-button:nth-child(7){
+	background-color:#F9F900;
+}
+.color-button:nth-child(8){
+	background-color:#F75000;
+}

@@ -4,37 +4,47 @@
 <head>
     <meta charset="utf-8" />
     <title>yep</title>
+	<link rel="stylesheet" href="./css/Game.css">
 	<script src="./js/socket.io.js"></script>
+	<script src="./js/Game.js"></script>
 </head>
 <body>
 	<input type="hidden" id="isGuestOrHost">
 	<input type="hidden" id="attendedRoom">
-    <canvas id="canvas" width="800px" height="800px" style="border:1px solid #000"></canvas>
-    <table>
-        <tr>
-            <td>
-                <div id="color">
-                    <input class="colorButton" type="button" value="" style="width:40px;height:40px;border:3px black solid;background-color:#000000;">
-                    <input class="colorButton" type="button" value="" style="width:40px;height:40px;border:3px black solid;background-color:#FFFFFF;">
-                    <input class="colorButton" type="button" value="" style="width:40px;height:40px;border:3px black solid;background-color:#FF0000;">
-                    <input class="colorButton" type="button" value="" style="width:40px;height:40px;border:3px black solid;background-color:#FF359A;">
-                    <input class="colorButton" type="button" value="" style="width:40px;height:40px;border:3px black solid;background-color:#FF44FF;">
+	<input type="hidden" id="userName">
+	
+	<table>
+		<tr>
+			<td>
+				<canvas id="canvas" class="canvas" width="800px" height="500px"></canvas> <!--  width="800px" height="500px" style="border:1px solid #000"!-->
+			</td>
+			<td>
+				
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<div id="color" class="color">
+                    <input class="color-button" type="button">
+					<input class="color-button" type="button">
+                    <input class="color-button" type="button">
+                    <input class="color-button" type="button">
                     <br>
-                    <input class="colorButton" type="button" value="" style="width:40px;height:40px;border:3px black solid;background-color:#0000C6;">
-                    <input class="colorButton" type="button" value="" style="width:40px;height:40px;border:3px black solid;background-color:#00FFFF;">
-                    <input class="colorButton" type="button" value="" style="width:40px;height:40px;border:3px black solid;background-color:#00BB00;">
-                    <input class="colorButton" type="button" value="" style="width:40px;height:40px;border:3px black solid;background-color:#F9F900;">
-                    <input class="colorButton" type="button" value="" style="width:40px;height:40px;border:3px black solid;background-color:#F75000;">
+                    
+                    <input class="color-button" type="button">
+                    <input class="color-button" type="button">
+                    <input class="color-button" type="button">
+                    <input class="color-button" type="button">
                 </div>
-            </td>
-            <td>
-                <input class="colorButton" type="button" value="" style="width:80px;height:84px;border:3px black solid;background-image:url(./Image/eraser.jpeg); background-size:contain; background-position: 0px 5px; background-color:#FFFFFF" >
-            </td>
-        </tr>
+				<input class="eraser-button" id="eraserButton" type="button" >
+			</td>
+			
+			<td>
+				<input type="text" id="messageInput">
+				<button id="messageButton">送出</button>
+			</td>
+		</tr>
     </table>
-    
-	<input type="text" id="messageInput">
-	<button id="messageButton">送出</button>
-    <script src="./js/Game.js"></script>
 </body>
 </html >
