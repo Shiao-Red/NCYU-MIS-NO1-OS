@@ -10,7 +10,8 @@
 	var attendedRoomInput=document.getElementById('attendedRoom');
 	var userNameInput=document.getElementById('userName');
 	var eraserButton=document.getElementById('eraserButton');
-
+	
+	var messageTextarea=document.getElementById('messageTextareaDiv');
 	var messageInput=document.getElementById('messageInput');
 	var messageButton=document.getElementById('messageButton');
 
@@ -34,7 +35,30 @@
 		let canvasContents=canvas.toDataURL();
 		socket.emit('clientCanvas', canvasContents);
 	}
+	
+	function rgbToHex(rgb) {  //把 rgb 轉成 16 進位
+		let returnString="#";
+		rgb = rgb.slice(4, -1);
+		rgb=rgb.split(',');
 
+		for (s of rgb) {
+			let tmpInt = parseInt(s);
+			if (tmpInt === 0) {
+				returnString += '00';
+			}
+			else {
+				returnString += tmpInt.toString(16);
+			}
+		}
+
+		return returnString;
+	}
+	
+	window.onpopstate = function(event) {
+		alert('重整就會離開房間哦!');
+		window.location='/Select.html';
+	};
+	
 	canvas.addEventListener(downEvent, function (e) {
 		isMouseActive = true;
 		x1 = e.offsetX;
@@ -75,29 +99,13 @@
 		sendCanvas();
 	});
 
-	messageButton.addEventListener('click', ()=>{
-		if(messageInput.value === '') return;
-	
-		socket.emit('clientMessage', messageInput.value);
+	messageButton.addEventListener('click', ()=>{ //client傳送訊息的部份
+		if(messageInput.value === '') return; //沒輸入東西的話，就直接忽略
+		let data={userName:userNameInput.value, message:messageInput.value, isGuestOrHost:isGuestOrHostInput.value};
+		console.log(data.isGuestOrHost);
+		socket.emit('clientMessage', data);
+		messageInput.value=''; //清空
 	});
-
-	function rgbToHex(rgb) {  //把 rgb 轉成 16 進位
-		let returnString="#";
-		rgb = rgb.slice(4, -1);
-		rgb=rgb.split(',');
-
-		for (s of rgb) {
-			let tmpInt = parseInt(s);
-			if (tmpInt === 0) {
-				returnString += '00';
-			}
-			else {
-				returnString += tmpInt.toString(16);
-			}
-		}
-
-		return returnString;
-	}
 
 	for (let button of colorButton) {//換顏色的 button
 		button.addEventListener('click', () => {
@@ -107,6 +115,7 @@
 	}
 	
 	eraserButton.addEventListener('click', ()=>{
+		//橡皮擦
 		let tmpString = window.getComputedStyle(eraserButton, null).backgroundColor;
 		paintColor = rgbToHex(tmpString);
 		console.log(paintColor);//test
@@ -128,13 +137,38 @@
 		}
 	});
 
-	socket.on('serverMessage', (data)=>{
-		alert(data);
+	socket.on('serverMessage', (data)=>{ //接收到有人傳的 data
+		let userNameP=document.createElement('p'); //要加在 messageTextareaDiv 的東西  使用者名稱
+		let messageP=document.createElement('p');
+		
+		userNameP.style.margin='0px';
+		userNameP.style.display='inline-block';
+		userNameP.innerHTML=data.userName+' : ';
+		
+		messageP.style.margin='0px';
+		messageP.style.display='inline-block';
+		messageP.innerHTML=data.message;
+		
+		if(data.isGuestOrHost === 'host'){//如果是房主傳的，顏色是紅色
+			 userNameP.style.color='red';
+		}
+		else{
+			 userNameP.style.color='green';
+		}
+		 
+		messageTextarea.appendChild(userNameP);
+		messageTextarea.appendChild(messageP);
+		messageTextarea.appendChild(document.createElement('br'));
+		
+		messageTextarea.scrollTop = messageTextarea.scrollHeight; //自動卷到最下面
 	});
 
 	socket.on('hostCloseRoom', ()=>{
-		alert('房主已經離開了');
-		window.location=('Select.html');
+		if(isGuestOrHostInput.value === 'guest'){
+			alert('房主已經離開了');
+			window.location=('Select.html');
+		}
+		
 	});
 
 	socket.on('serverCanvas', (data)=>{

@@ -96,6 +96,7 @@ app.get('/logout', (req, res)=>{
 
 app.get('/createRoom', (req, res)=>{
 	//創房間時使用的get路徑
+	req.session.isGuestOrHost='host';
 	allRooms.add(req.session.userName);
 	req.session.attendedRoom=req.session.userName; //創建房間的session
 	res.end();
@@ -124,7 +125,6 @@ app.get('/Game.html', (req, res)=>{
 		它加入的是哪個房間
 	*/
 	
-	console.log(`game.html?room=${req.query.Room}`);
 	if(req.query.Room){
 		req.session.attendedRoom=req.query.Room;
 	}
@@ -151,6 +151,7 @@ app.get('/Select.html', (req, res)=>{
 });
 
 app.get('/GameRoomList.html', (req, res)=>{
+	req.session.isGuestOrHost='guest';
 	res.sendFile(__dirname+'/GameRoomList.html');
 });
 
@@ -161,27 +162,20 @@ https://socket.io/docs/v3/rooms/index.html
 
 io.on('connection', (socket)=>{
 	//socket 的程式
-
-	let isGuestOrHost;
 	
-	if(allRooms.has(socket.request.session.userName)){
-	//如果這人有創房的話，allRooms 裡就會有他的名字
-		isGuestOrHost='host'
-	}
-	else{
-		isGuestOrHost='guest'
+	if(!allRooms.has(socket.request.session.userName) && socket.request.session.isGuestOrHost === 'host'){
+		//這裡是處理房主重整房間後，會發生房間消失的事情
+		allRooms.add(socket.request.session.userName);
 	}
 	
 	socket.join(socket.request.session.attendedRoom); //加入房間
-	console.log(`attendedRoom = ${socket.request.session.attendedRoom}`);
 	
 	socket.on('clientProfile', ()=>{//client端的請求
-		io.to(socket.request.session.attendedRoom).emit('serverProfile', {isGuestOrHost:isGuestOrHost, attendedRoom:socket.request.session.attendedRoom, userName:socket.request.session.userName});
+		io.to(socket.request.session.attendedRoom).emit('serverProfile', {isGuestOrHost:socket.request.session.isGuestOrHost, attendedRoom:socket.request.session.attendedRoom, userName:socket.request.session.userName});
 		//讓 client 端知道自己是 host or guest
 		//還有加入的房間是哪個
 	});
-	
-	
+
 	socket.on('clientCanvas', (data)=>{
 		io.to(socket.request.session.attendedRoom).emit('serverCanvas', data);
 	});
@@ -191,14 +185,14 @@ io.on('connection', (socket)=>{
 	});
 	
 	socket.on('disconnect',()=>{
-		if(isGuestOrHost === 'host'){ //是host的話，還要清除房間
+		if(socket.request.session.isGuestOrHost === 'host'){ //是host的話，還要清除房間
 			io.to(socket.request.session.attendedRoom).emit('hostCloseRoom');
-			allRooms.delete(socket.request.session.userName);
 			/*
 				我無法透過 delete socket.request.session.attendedRoom 來去除
 				session，不過我有其它解決辦法，在 app.get('/Game.html')那邊
 				有處理
 			*/
+			allRooms.delete(socket.request.session.userName);
 		}
 		socket.leave(socket.request.session.attendedRoom); //離開房間
 	});

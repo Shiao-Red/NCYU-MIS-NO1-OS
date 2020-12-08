@@ -12,37 +12,40 @@
 	<input type="hidden" id="isGuestOrHost">
 	<input type="hidden" id="attendedRoom">
 	<input type="hidden" id="userName">
-	
+	<h1 id="whosRoomH1"></h1>
 	<table>
 		<tr>
 			<td>
 				<canvas id="canvas" class="canvas" width="800px" height="500px"></canvas> <!--  width="800px" height="500px" style="border:1px solid #000"!-->
 			</td>
 			<td>
-				
+				<div class="message-textarea-div" id="messageTextareaDiv"></div>
 			</td>
 		</tr>
 		
 		<tr>
 			<td>
-				<div id="color" class="color">
-                    <input class="color-button" type="button">
-					<input class="color-button" type="button">
-                    <input class="color-button" type="button">
-                    <input class="color-button" type="button">
-                    <br>
-                    
-                    <input class="color-button" type="button">
-                    <input class="color-button" type="button">
-                    <input class="color-button" type="button">
-                    <input class="color-button" type="button">
-                </div>
-				<input class="eraser-button" id="eraserButton" type="button" >
+				<div align="center">
+					<div id="colorDiv" class="color-div">
+						<input class="color-button" type="button">
+						<input class="color-button" type="button">
+						<input class="color-button" type="button">
+						<input class="color-button" type="button">
+						<br>
+						<input class="color-button" type="button">
+						<input class="color-button" type="button">
+						<input class="color-button" type="button">
+						<input class="color-button" type="button">
+					</div>
+					<input class="eraser-button" id="eraserButton" type="button" >
+				<div>
 			</td>
 			
 			<td>
-				<input type="text" id="messageInput">
-				<button id="messageButton">送出</button>
+				<div align="center">
+					<input type="text" id="messageInput">
+					<button id="messageButton">送出</button>
+				</div>
 			</td>
 		</tr>
     </table>
