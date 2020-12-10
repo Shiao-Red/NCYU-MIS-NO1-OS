@@ -186,16 +186,19 @@ io.on('connection', (socket)=>{
 		allRooms.get(attendedRoom).push(userName);
 	}
 	
-	console.log(allRooms); //test
-	
 	socket.join(attendedRoom); //加入房間
 	
 	io.to(attendedRoom).emit('numberOfPersonChange', allRooms.get(attendedRoom).length); //有人加入時，人數的變化事件
+	io.to(attendedRoom).emit('hostConfigBarSelectUpdate', Array.from(allRooms.get(attendedRoom))); //更新 host config bar select 的東東
 	
 	socket.on('clientProfile', ()=>{//client端的請求
 		io.to(attendedRoom).emit('serverProfile', {isGuestOrHost:isGuestOrHost, attendedRoom:attendedRoom, userName:userName});
 		//讓 client 端知道自己是 host or guest
 		//還有加入的房間是哪個，人數也順便
+	});
+	
+	socket.on('clientDrawerChange', (data)=>{ //server收到畫畫的人更動的事件
+		io.to(attendedRoom).emit('serverDrawerChange', data);
 	});
 
 	socket.on('clientCanvas', (data)=>{
@@ -218,12 +221,16 @@ io.on('connection', (socket)=>{
 		}
 		else{
 			let array=allRooms.get(attendedRoom);
-			array=array.filter(function(item){
-				return item !== userName;
-			});
-			allRooms.set(attendedRoom, array);
+			
+			if(array){
+				array=array.filter(function(item){
+					return item !== userName;
+				});
+				allRooms.set(attendedRoom, array);
 	
-			io.to(attendedRoom).emit('numberOfPersonChange', allRooms.get(attendedRoom).length);
+				io.to(attendedRoom).emit('numberOfPersonChange', allRooms.get(attendedRoom).length);
+				io.to(attendedRoom).emit('hostConfigBarSelectUpdate', Array.from(allRooms.get(attendedRoom))); //更新 host config bar select 的東東
+			}
 		}
 		
 		

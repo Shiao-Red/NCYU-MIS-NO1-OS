@@ -17,13 +17,9 @@
 	var numberOfPersonH1=document.getElementById('numberOfPersonH1');
 	var whosRoomH1=document.getElementById('whosRoomH1');
 
-	//起始位置
-	let x1 = 0;
-	let y1 = 0;
-
-	// 終止位置
-	let x2 = 0;
-	let y2 = 0;
+	var hostConfigBarDiv=document.getElementById('hostConfigBarDiv');
+	var arrowImage=document.getElementById('arrowImage');
+	var hostConfigBarSelect=document.getElementById('hostConfigBarSelect');
 
 	const hasTouchEvent = 'ontouchstart' in window ? true : false;
 
@@ -32,7 +28,16 @@
 	const upEvent = hasTouchEvent ? 'touchend' : 'mouseup';
 
 	var isMouseActive=false;
+	
+	
+	//起始位置
+	let x1 = 0;
+	let y1 = 0;
 
+	// 終止位置
+	let x2 = 0;
+	let y2 = 0;
+	
 	function sendCanvas(){
 		let canvasContents=canvas.toDataURL();
 		socket.emit('clientCanvas', canvasContents);
@@ -56,12 +61,7 @@
 		return returnString;
 	}
 	
-	window.onpopstate = function(event) {
-		alert('重整就會離開房間哦!');
-		window.location='/Select.html';
-	};
-	
-	canvas.addEventListener(downEvent, function (e) {
+	function downEventFunction(e){ //事件獨立出來，方便之後弄掉
 		isMouseActive = true;
 		x1 = e.offsetX;
 		y1 = e.offsetY;
@@ -75,9 +75,9 @@
 		
 		ctx.lineCap = 'round';
 		ctx.lineJoin = 'round';
-	});
-
-	canvas.addEventListener(moveEvent, function (e) {
+	}
+	
+	function moveEventFunction(e){
 		if (!isMouseActive) {
 			return;
 		}
@@ -94,13 +94,42 @@
 
 		x1 = x2;
 		y1 = y2;
-	})
-
-	canvas.addEventListener(upEvent, function (e) {
+	}
+	
+	function upEventFunction(e){
 		isMouseActive = false;
 		sendCanvas();
-	});
+	}
+	
+	function changeCanvasListen(trueOrFalse){ //加入或移除 Canvas 的監聽事件
+		//就是自己的 canvas 能不能畫
+		if(trueOrFalse){
+			canvas.addEventListener(downEvent, downEventFunction);
+			canvas.addEventListener(moveEvent, moveEventFunction);
+			canvas.addEventListener(upEvent, upEventFunction);
+		}
+		else{
+			canvas.removeEventListener(downEvent, downEventFunction);
+			canvas.removeEventListener(moveEvent, moveEventFunction);
+			canvas.removeEventListener(upEvent, upEventFunction);
+		}
+	}
 
+	arrowImage.addEventListener('click', ()=>{ //收起或展開 host 選單的部份
+		if(arrowImage.style.transform === ''){//沒變型的話，表示目前是收起來
+			arrowImage.style.transform='scaleY(-1)';
+			hostConfigBarDiv.style.top='0px';
+		}
+		else{
+			arrowImage.style.transform='';
+			hostConfigBarDiv.style.top='-240px';
+		}
+	});
+	
+	hostConfigBarSelect.addEventListener('change', ()=>{ //變更誰可以畫圖的事件
+		socket.emit('clientDrawerChange', hostConfigBarSelect.value);
+	});
+	
 	messageButton.addEventListener('click', ()=>{ //client傳送訊息的部份
 		if(messageInput.value === '') return; //沒輸入東西的話，就直接忽略
 		let data={userName:userNameInput.value, message:messageInput.value, isGuestOrHost:isGuestOrHostInput.value};
@@ -120,7 +149,6 @@
 		//橡皮擦
 		let tmpString = window.getComputedStyle(eraserButton, null).backgroundColor;
 		paintColor = rgbToHex(tmpString);
-		console.log(paintColor);//test
 	});
 
 	/*
@@ -131,12 +159,30 @@
 	******************************
 	*/
 	
-	socket.on('serverProfile', (data)=>{
-		if(isGuestOrHostInput.value === '' || attendedRoomInput.value === '' || userNameInput === ''){
+	socket.on('serverProfile', (data)=>{//初始化的部份
+		if(isGuestOrHostInput.value === '' || attendedRoomInput.value === '' || userNameInput === ''){ //把那些資訊都存到前端的 hidden input裡
 			isGuestOrHostInput.value=data.isGuestOrHost;
 			attendedRoomInput.value=data.attendedRoom;
 			userNameInput.value=data.userName;
-			whosRoomH1.innerText=data.attendedRoom;
+		}
+		
+		whosRoomH1.innerText=data.attendedRoom;// 顯示房主的名字
+		
+		if(isGuestOrHost.value === 'guest'){//只有 host 才會顯示 host config bar
+			hostConfigBarDiv.style.display='none';
+		}
+		
+		if(isGuestOrHost.value === 'host'){ //host 沒選擇的話，預設是他自己可以畫畫
+			changeCanvasListen(true);
+		}
+	});
+	
+	socket.on('serverDrawerChange', (data)=>{ //可以畫畫的人變了
+		if(userNameInput.value === data){ //自己可以畫畫了
+			changeCanvasListen(true);
+		}
+		else{//自己不能畫畫了
+			changeCanvasListen(false); //如果自己的 canvas 被去除原本就沒註冊的事件，好像沒關系
 		}
 	});
 	
@@ -144,6 +190,17 @@
 		numberOfPersonH1.innerText=data.toString();
 	});
 
+	socket.on('hostConfigBarSelectUpdate', (data)=>{ //更新 host config bar select 可選的人
+		hostConfigBarSelect.innerHTML=''; //先清空內容
+		
+		for(let d of data){
+			let tmpOption=document.createElement('option');
+			tmpOption.innerText=d;
+			tmpOption.value=d;
+			hostConfigBarSelect.appendChild(tmpOption);
+		}
+	});
+	
 	socket.on('serverMessage', (data)=>{ //接收到有人傳的 data
 		let userNameP=document.createElement('p'); //要加在 messageTextareaDiv 的東西  使用者名稱
 		let messageP=document.createElement('p');
