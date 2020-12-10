@@ -14,6 +14,7 @@
 	var messageTextarea=document.getElementById('messageTextareaDiv');
 	var messageInput=document.getElementById('messageInput');
 	var messageButton=document.getElementById('messageButton');
+	var numberOfPersonH1=document.getElementById('numberOfPersonH1');
 
 	//起始位置
 	let x1 = 0;
@@ -135,6 +136,10 @@
 			attendedRoomInput.value=data.attendedRoom;
 			userNameInput.value=data.userName;
 		}
+	});
+	
+	socket.on('numberOfPersonChange', (data)=>{ //更動人數
+		numberOfPersonH1.innerText=data.toString();
 	});
 
 	socket.on('serverMessage', (data)=>{ //接收到有人傳的 data

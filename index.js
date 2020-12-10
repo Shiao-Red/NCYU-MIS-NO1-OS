@@ -6,7 +6,11 @@ const session = require('express-session');
 const cookieParser=require('cookie-parser');
 
 var allUsers=new Set();
-var allRooms=new Set();
+var allRooms=new Map();
+/*
+	javascript map:https://pjchender.github.io/2018/07/30/js-javascript-map/
+	map 用來記有什麼房間，裡面有哪些人
+*/
 
 var sessionMiddleware = session({
   secret: "1234",
@@ -72,7 +76,7 @@ app.get('/queryUserName', (req, res)=>{
 });
 
 app.get('/queryRooms', (req, res)=>{
-	res.send(Array.from(allRooms));//現有的房間，以陣列來傳送
+	res.send(Array.from(allRooms.keys()));//現有的房間，以陣列來傳送 test
 	res.end();
 });
 
@@ -97,7 +101,7 @@ app.get('/logout', (req, res)=>{
 app.get('/createRoom', (req, res)=>{
 	//創房間時使用的get路徑
 	req.session.isGuestOrHost='host';
-	allRooms.add(req.session.userName);
+	allRooms.set(req.session.userName, [req.session.userName]);
 	req.session.attendedRoom=req.session.userName; //創建房間的session
 	res.end();
 });
@@ -162,39 +166,61 @@ https://socket.io/docs/v3/rooms/index.html
 
 io.on('connection', (socket)=>{
 	//socket 的程式
+	let userName=socket.request.session.userName;
+	let isGuestOrHost=socket.request.session.isGuestOrHost;
+	let attendedRoom=socket.request.session.attendedRoom;
 	
-	if(!allRooms.has(socket.request.session.userName) && socket.request.session.isGuestOrHost === 'host'){
+	if(!allRooms.has(userName) && isGuestOrHost === 'host'){
 		//這裡是處理房主重整房間後，會發生房間消失的事情
-		allRooms.add(socket.request.session.userName);
+		allRooms.set(userName, [userName]);
 	}
 	
-	socket.join(socket.request.session.attendedRoom); //加入房間
+	if(isGuestOrHost === 'guest'){ //更新 allRooms 的人
+		allRooms.get(attendedRoom).push(userName);
+	}
+	
+	console.log(allRooms); //test
+	
+	socket.join(attendedRoom); //加入房間
+	
+	io.to(attendedRoom).emit('numberOfPersonChange', allRooms.get(attendedRoom).length); //有人加入時，人數的變化事件
 	
 	socket.on('clientProfile', ()=>{//client端的請求
-		io.to(socket.request.session.attendedRoom).emit('serverProfile', {isGuestOrHost:socket.request.session.isGuestOrHost, attendedRoom:socket.request.session.attendedRoom, userName:socket.request.session.userName});
+		io.to(attendedRoom).emit('serverProfile', {isGuestOrHost:isGuestOrHost, attendedRoom:attendedRoom, userName:userName});
 		//讓 client 端知道自己是 host or guest
-		//還有加入的房間是哪個
+		//還有加入的房間是哪個，人數也順便
 	});
 
 	socket.on('clientCanvas', (data)=>{
-		io.to(socket.request.session.attendedRoom).emit('serverCanvas', data);
+		io.to(attendedRoom).emit('serverCanvas', data);
 	});
 	
 	socket.on('clientMessage', (data)=>{
-		io.to(socket.request.session.attendedRoom).emit('serverMessage', data);
+		io.to(attendedRoom).emit('serverMessage', data);
 	});
 	
 	socket.on('disconnect',()=>{
-		if(socket.request.session.isGuestOrHost === 'host'){ //是host的話，還要清除房間
-			io.to(socket.request.session.attendedRoom).emit('hostCloseRoom');
+		if(isGuestOrHost === 'host'){ //是host的話，還要清除房間
+			io.to(attendedRoom).emit('hostCloseRoom'); //叫其它人離開
 			/*
 				我無法透過 delete socket.request.session.attendedRoom 來去除
 				session，不過我有其它解決辦法，在 app.get('/Game.html')那邊
 				有處理
 			*/
-			allRooms.delete(socket.request.session.userName);
+			allRooms.delete(userName);
 		}
-		socket.leave(socket.request.session.attendedRoom); //離開房間
+		else{
+			let array=allRooms.get(attendedRoom);
+			array=array.filter(function(item){
+				return item !== userName;
+			});
+			allRooms.set(attendedRoom, array);
+	
+			io.to(attendedRoom).emit('numberOfPersonChange', allRooms.get(attendedRoom).length);
+		}
+		
+		
+		socket.leave(attendedRoom); //離開房間
 	});
 });
 

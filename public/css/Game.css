@@ -7,6 +7,10 @@ tr, td{
 	padding:0;
 }
 
+.top-bar-div  h1{
+	display:inline-block;
+}
+
 .color-button{
 	width:40px;
 	height:40px;
