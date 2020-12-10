@@ -4,9 +4,11 @@ const server=require('http').Server(app);
 const io=require('socket.io')(server);
 const session = require('express-session');
 const cookieParser=require('cookie-parser');
+const roomMaxPerson=10; //限制最大人數
 
 var allUsers=new Set();
 var allRooms=new Map();
+
 /*
 	javascript map:https://pjchender.github.io/2018/07/30/js-javascript-map/
 	map 用來記有什麼房間，裡面有哪些人
@@ -80,12 +82,17 @@ app.get('/queryRooms', (req, res)=>{
 	res.end();
 });
 
-app.get('/isRoomAlive', (req, res)=>{
+app.get('/canEnterRoom', (req, res)=>{
 	if(allRooms.has(req.query.Room)){
-		res.send('yes');
+		if(allRooms.get(req.query.Room).length === roomMaxPerson){
+			res.send('full');
+		}
+		else{
+			res.send('can');
+		}
 	}
 	else{
-		res.send('no');
+		res.send('gone');
 	}
 	res.end()
 });

@@ -15,6 +15,7 @@
 	var messageInput=document.getElementById('messageInput');
 	var messageButton=document.getElementById('messageButton');
 	var numberOfPersonH1=document.getElementById('numberOfPersonH1');
+	var whosRoomH1=document.getElementById('whosRoomH1');
 
 	//起始位置
 	let x1 = 0;
@@ -135,6 +136,7 @@
 			isGuestOrHostInput.value=data.isGuestOrHost;
 			attendedRoomInput.value=data.attendedRoom;
 			userNameInput.value=data.userName;
+			whosRoomH1.innerText=data.attendedRoom;
 		}
 	});
 	

@@ -10,12 +10,16 @@
 	
 	function enterGame(event){ //按鈕被按時，要做的確認
 		let whosRoom=event.srcElement.innerText;
-		$.get('/isRoomAlive?Room='+whosRoom,(data)=>{
-			if(data === 'yes'){
+		$.get('/canEnterRoom?Room='+whosRoom,(data)=>{
+			if(data === 'can'){
 				window.location='/Game.html?Room='+whosRoom;
 			}
-			else{
-				alert('這個房間已經不在了!!');
+			else if(data === 'full'){
+				alert('這個房間滿了!!');
+				window.location.reload();
+			}
+			else if(data === 'gone'){
+				alert('這個房間不在了!!');
 				window.location.reload();
 			}
 		}); 
