@@ -188,7 +188,8 @@ io.on('connection', (socket)=>{
 	
 	socket.join(attendedRoom); //加入房間
 	
-	io.to(attendedRoom).emit('numberOfPersonChange', allRooms.get(attendedRoom).length); //有人加入時，人數的變化事件
+	io.to(attendedRoom).emit('numberOfPersonChange', {number:allRooms.get(attendedRoom).length, userName:userName, status:'join'});
+	//有人加入時，人數的變化事件，傳目前人數還有加入的人的名字，status是用來表示 join or leave
 	io.to(attendedRoom).emit('hostConfigBarSelectUpdate', Array.from(allRooms.get(attendedRoom))); //更新 host config bar select 的東東
 	
 	socket.on('clientProfile', ()=>{//client端的請求
@@ -228,7 +229,7 @@ io.on('connection', (socket)=>{
 				});
 				allRooms.set(attendedRoom, array);
 	
-				io.to(attendedRoom).emit('numberOfPersonChange', allRooms.get(attendedRoom).length);
+				io.to(attendedRoom).emit('numberOfPersonChange', {number:allRooms.get(attendedRoom).length, userName:userName, status:'leave'});
 				io.to(attendedRoom).emit('hostConfigBarSelectUpdate', Array.from(allRooms.get(attendedRoom))); //更新 host config bar select 的東東
 			}
 		}

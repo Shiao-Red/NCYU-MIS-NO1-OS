@@ -5,6 +5,8 @@
 
 
 	var paintColor;
+	var currentDrawer;
+	
 	var colorButton = document.getElementsByClassName('color-button');
 	var isGuestOrHostInput=document.getElementById('isGuestOrHost');
 	var attendedRoomInput=document.getElementById('attendedRoom');
@@ -21,10 +23,11 @@
 	var arrowImage=document.getElementById('arrowImage');
 	var hostConfigBarSelect=document.getElementById('hostConfigBarSelect');
 
-	const hasTouchEvent = 'ontouchstart' in window ? true : false;
-
-	const downEvent = hasTouchEvent ? 'ontouchstart' : 'mousedown';
-	const moveEvent = hasTouchEvent ? 'ontouchmove' : 'mousemove';
+	const hasTouchEvent = window.matchMedia("(pointer: coarse)").matches;//'ontouchstart' in window ? true : false;
+	console.log(window.matchMedia("(pointer: coarse)").matches);//test
+	
+	const downEvent = hasTouchEvent ? 'touchstart' : 'mousedown';
+	const moveEvent = hasTouchEvent ? 'touchmove' : 'mousemove';
 	const upEvent = hasTouchEvent ? 'touchend' : 'mouseup';
 
 	var isMouseActive=false;
@@ -37,6 +40,32 @@
 	// 終止位置
 	let x2 = 0;
 	let y2 = 0;
+	
+	function broadMessage(data, color, timeout){ //test
+		let width=window.innerWidth;
+		let tmpDiv=document.createElement('div');
+		let tmpP=document.createElement('p');
+		
+		tmpP.innerText=data;
+		tmpP.style.fontSize='20px';
+		
+		tmpDiv.style.textAlign='center';
+		tmpDiv.style.verticalAlign='middle';
+		tmpDiv.style.border='2px solid black';
+		tmpDiv.style.height='80px';
+		tmpDiv.style.width='200px';
+		tmpDiv.style.backgroundColor=color;
+		tmpDiv.style.position='fixed';
+		tmpDiv.style.top='0px';
+		tmpDiv.style.left=(width/2-100)+'px';
+		
+		tmpDiv.appendChild(tmpP);
+		document.body.appendChild(tmpDiv);
+		
+		setTimeout(()=>{
+			document.body.removeChild(tmpDiv);
+		}, timeout);
+	}
 	
 	function sendCanvas(){
 		let canvasContents=canvas.toDataURL();
@@ -63,8 +92,16 @@
 	
 	function downEventFunction(e){ //事件獨立出來，方便之後弄掉
 		isMouseActive = true;
-		x1 = e.offsetX;
-		y1 = e.offsetY;
+		
+		if(hasTouchEvent){
+			x1=e.clientX;
+			y1=e.clientY;
+		}
+		else{
+			x1 = e.offsetX;
+			y1 = e.offsetY;
+		}
+		
 		
 		if(paintColor === '#ffffff'){
 			ctx.lineWidth=50;
@@ -82,8 +119,16 @@
 			return;
 		}
 		// 起始點
-		x2 = e.offsetX;
-		y2 = e.offsetY;
+		//x2 = e.offsetX;
+		//y2 = e.offsetY;
+		if(hasTouchEvent){
+			x2=e.clientX;
+			y2=e.clientY;
+		}
+		else{
+			x2 = e.offsetX;
+			y2 = e.offsetY;
+		}
 		
 		// 畫筆部份
 		ctx.strokeStyle = paintColor || "#000000";
@@ -184,10 +229,28 @@
 		else{//自己不能畫畫了
 			changeCanvasListen(false); //如果自己的 canvas 被去除原本就沒註冊的事件，好像沒關系
 		}
+		currentDrawer=data;//用來記目前畫畫的人的變數
+		broadMessage('目前畫畫的人是'+data, '#2894FF', 3000); //跟大家廣播能畫畫的人是誰
 	});
 	
-	socket.on('numberOfPersonChange', (data)=>{ //更動人數
-		numberOfPersonH1.innerText=data.toString();
+	socket.on('numberOfPersonChange', (data)=>{ //更動人數，data 會有 number , userName , status 
+		numberOfPersonH1.innerText=data.number.toString(); //更動人數的 H1 顯示
+		
+		if(data.status === 'join'){//區分加入與離開
+			new broadMessage(data.userName+'加入了房間', '#C2FF68', 1500);
+		}
+		else if(data.status === 'leave'){
+			new broadMessage(data.userName+'離開了房間', '#FF5151', 1500);
+			
+			if(data.userName === currentDrawer){
+				//如果離開的人剛好就是那個畫畫的人，host 會拿回畫畫的主導權
+				currentDrawer=attendedRoomInput.value;
+				if(isGuestOrHostInput.value === 'host'){//host拿回畫畫主導權
+					changeCanvasListen(true);
+				}
+			}
+		}
+		
 	});
 
 	socket.on('hostConfigBarSelectUpdate', (data)=>{ //更新 host config bar select 可選的人
@@ -232,7 +295,6 @@
 			alert('房主已經離開了');
 			window.location=('Select.html');
 		}
-		
 	});
 
 	socket.on('serverCanvas', (data)=>{
