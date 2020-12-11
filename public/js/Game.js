@@ -12,6 +12,7 @@
 	var attendedRoomInput=document.getElementById('attendedRoom');
 	var userNameInput=document.getElementById('userName');
 	var eraserButton=document.getElementById('eraserButton');
+	var mainTable=document.getElementById('mainTable');
 	
 	var messageTextarea=document.getElementById('messageTextareaDiv');
 	var messageInput=document.getElementById('messageInput');
@@ -23,8 +24,7 @@
 	var arrowImage=document.getElementById('arrowImage');
 	var hostConfigBarSelect=document.getElementById('hostConfigBarSelect');
 
-	const hasTouchEvent = window.matchMedia("(pointer: coarse)").matches;//'ontouchstart' in window ? true : false;
-	console.log(window.matchMedia("(pointer: coarse)").matches);//test
+	const hasTouchEvent = 'ontouchstart' in window ? true : false;
 	
 	const downEvent = hasTouchEvent ? 'touchstart' : 'mousedown';
 	const moveEvent = hasTouchEvent ? 'touchmove' : 'mousemove';
@@ -41,7 +41,7 @@
 	let x2 = 0;
 	let y2 = 0;
 	
-	function broadMessage(data, color, timeout){ //test
+	function broadMessage(data, color, timeout){
 		let width=window.innerWidth;
 		let tmpDiv=document.createElement('div');
 		let tmpP=document.createElement('p');
@@ -93,15 +93,15 @@
 	function downEventFunction(e){ //事件獨立出來，方便之後弄掉
 		isMouseActive = true;
 		
-		if(hasTouchEvent){
-			x1=e.clientX;
-			y1=e.clientY;
+		if(hasTouchEvent){//它還要再減 mainTable 的 offsetTop 跟 offsetLeft ，在 canvas 才會顯示正確
+			//https://www.w3schools.com/jsref/event_touch_touches.asp
+			x1=e.touches[0].clientX-mainTable.offsetLeft;
+			y1=e.touches[0].clientY-mainTable.offsetTop;
 		}
 		else{
 			x1 = e.offsetX;
 			y1 = e.offsetY;
 		}
-		
 		
 		if(paintColor === '#ffffff'){
 			ctx.lineWidth=50;
@@ -119,11 +119,9 @@
 			return;
 		}
 		// 起始點
-		//x2 = e.offsetX;
-		//y2 = e.offsetY;
 		if(hasTouchEvent){
-			x2=e.clientX;
-			y2=e.clientY;
+			x2=e.touches[0].clientX-mainTable.offsetLeft;
+			y2=e.touches[0].clientY-mainTable.offsetTop;
 		}
 		else{
 			x2 = e.offsetX;
