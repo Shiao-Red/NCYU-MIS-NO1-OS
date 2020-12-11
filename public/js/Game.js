@@ -1,8 +1,8 @@
 ﻿window.onload=function(){
 	const canvas = document.getElementById('canvas');
 	const ctx = canvas.getContext('2d');
-	const socket=new io();
-
+	//const socket=new io();
+	const socket=io();
 
 	var paintColor;
 	var currentDrawer;
