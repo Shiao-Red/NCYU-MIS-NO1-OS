@@ -157,6 +157,14 @@
 			canvas.removeEventListener(upEvent, upEventFunction);
 		}
 	}
+	
+	function messageInputSendMessage(){
+		if(messageInput.value === '') return; //沒輸入東西的話，就直接忽略
+		let data={userName:userNameInput.value, message:messageInput.value, isGuestOrHost:isGuestOrHostInput.value};
+		console.log(data.isGuestOrHost);
+		socket.emit('clientMessage', data);
+		messageInput.value=''; //清空
+	}
 
 	arrowImage.addEventListener('click', ()=>{ //收起或展開 host 選單的部份
 		if(arrowImage.style.transform === ''){//沒變型的話，表示目前是收起來
@@ -174,11 +182,13 @@
 	});
 	
 	messageButton.addEventListener('click', ()=>{ //client傳送訊息的部份
-		if(messageInput.value === '') return; //沒輸入東西的話，就直接忽略
-		let data={userName:userNameInput.value, message:messageInput.value, isGuestOrHost:isGuestOrHostInput.value};
-		console.log(data.isGuestOrHost);
-		socket.emit('clientMessage', data);
-		messageInput.value=''; //清空
+		messageInputSendMessage();
+	});
+	
+	document.addEventListener('keypress', (event)=>{ //同上，只是是用 enter 送出
+		if(event.code === 'Enter' || event.code === 'NumpadEnter'){
+			messageInputSendMessage();
+		}
 	});
 
 	for (let button of colorButton) {//換顏色的 button
@@ -212,7 +222,8 @@
 		whosRoomH1.innerText=data.attendedRoom;// 顯示房主的名字
 		
 		if(isGuestOrHost.value === 'guest'){//只有 host 才會顯示 host config bar
-			hostConfigBarDiv.style.display='none';
+			//hostConfigBarDiv.style.display='none';
+			document.body.removeChild(hostConfigBarDiv);
 		}
 		
 		if(isGuestOrHost.value === 'host'){ //host 沒選擇的話，預設是他自己可以畫畫
