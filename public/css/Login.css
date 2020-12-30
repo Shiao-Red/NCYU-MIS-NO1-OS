@@ -4,18 +4,22 @@ body {
     height: 100%;
     position: absolute;
     font-family: Raleway;
-    background: url(../Image/background.jpg) no-repeat fixed;
+    background: url(../Image/background.png) no-repeat fixed;
     background-size: cover;
     background-position: 50%;
     -webkit-font-smoothing: antialiased;
 }
+body::-webkit-scrollbar {
+  display: none;
+}
+
 body .menu {
   position: absolute;
   width: 100%;
   background: inherit;
 }
     body .menu .mainmenu {
-        background: url(../Image/wallpaper.jpg) no-repeat fixed;
+        background: url(../Image/wallpaper.png) no-repeat fixed;
         background-size: cover;
         background-position: 50%;
     }
@@ -28,6 +32,13 @@ body .menu .mainmenu:before {
   background: inherit;
   -webkit-filter: blur(3px);
   filter: blur(3px);
+}
+body .LOGO{
+     width: 900px;
+     height: 300px;
+     top: 10%;
+     left: 20%;
+     position: absolute;
 }
 body .menu .mainmenu:after {
   clear: both;
@@ -105,8 +116,8 @@ body .article h1 {
 .form {
   margin: 0 auto;
   position: fixed;
-  top: 35%;
-  left: 50%;
+  top: 50%;
+  left: 47.5%;
   -moz-transform: translate3d(-50%, 0, 0);
   -ms-transform: translate3d(-50%, 0, 0);
   -webkit-transform: translate3d(-50%, 0, 0);
@@ -128,7 +139,7 @@ body .article h1 {
   position: absolute;
   left: 0;
   top: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(68, 165, 221, 0.3);
 }
 .form:before {
   content: "";
@@ -172,7 +183,6 @@ body .article h1 {
   -moz-transition: width 150ms ease-in-out, background-color 150ms ease-in-out 250ms, border 150ms ease-in-out 250ms;
   -o-transition: width 150ms ease-in-out, background-color 150ms ease-in-out 250ms, border 150ms ease-in-out 250ms;
   -webkit-transition: width 150ms ease-in-out, background-color 150ms ease-in-out, border 150ms ease-in-out;
-  -webkit-transition-delay: 0s, 250ms, 250ms;
   transition: width 150ms ease-in-out, background-color 150ms ease-in-out 250ms, border 150ms ease-in-out 250ms;
 }
 .form .topbar .input {
@@ -218,10 +228,10 @@ body .article h1 {
   font-family: Raleway;
   font-weight: 200;
   display: block;
-  color: white;
+  color: rgb(255, 255, 255);
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(24, 224, 164, 0.651);
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
@@ -231,11 +241,11 @@ body .article h1 {
   outline: none;
 }
 .form .submit:hover {
-  color: white;
+  color: rgb(0, 0, 0);
   border: 1px solid white;
 }
 .form .submit.recover {
-  background: #FF2B4B;
+  background: #ffffff;
   color: white !important;
   border: 1px solid white !important;
   transition: all 400ms linear;
@@ -244,16 +254,16 @@ body .article h1 {
 .topbar.error .spanColor {
   width: calc(100% - 39px);
   border-top-left-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(212, 21, 21, 0.719);
   border-bottom-left-radius: 6px;
-  background-color: #FF2B4B;
+  background-color: #ff0026;
 }
 .topbar.error + .submit {
   color: white;
 }
 .topbar.error .input {
-  color: rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0);
+  border: 1px solid rgba(255, 255, 255, 0);
 }
 .topbar.error .input::-webkit-input-placeholder {
   color: white;

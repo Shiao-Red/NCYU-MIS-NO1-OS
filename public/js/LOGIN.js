@@ -1,4 +1,5 @@
 ﻿window.onload=function(){
+	var form = $('.form');
 	var isInputOk;
 	var button=document.getElementsByTagName('button')[1];
 	var text=document.getElementsByTagName('input')[0];
@@ -44,4 +45,5 @@
 		}
 	});
 }
+
 

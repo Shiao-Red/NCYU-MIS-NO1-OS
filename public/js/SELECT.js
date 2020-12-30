@@ -16,7 +16,7 @@
 				case '遊戲排行榜':
 					console.log(3);
 					break;
-				case '登出':
+				case '我要登出':
 					$.get('logout');
 					window.location='/';
 			}

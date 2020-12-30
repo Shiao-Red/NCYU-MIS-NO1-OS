@@ -11,10 +11,12 @@ header {
 	position: relative;
 }
 
-.logo img {
-	position: relative;
-	top:60px;
-	right: -25%;
+body .logo{
+	width: 900px;
+	height: 300px;
+	top: 10%;
+	left: 20%;
+	position: absolute;
 }
 
 table{
@@ -26,7 +28,10 @@ table{
 	display:block;
 	margin-left:auto;
 	margin-right:auto;
+	margin-top: 65%;
 	font-size:40px;
 	border: solid 5px white;
-	background:  url(../Image/background.png);
+	background:  rgba(0, 195, 255, 0.4);
+	cursor: pointer;
 }
+
