@@ -1,8 +1,8 @@
 ﻿window.onload=function(){
 	var isInputOk;
-	var button=document.getElementsByTagName('button')[0];
+	var button=document.getElementsByTagName('button')[1];
 	var text=document.getElementsByTagName('input')[0];
-	var messageBar=document.getElementById('messageBar');
+	var messageBar=document.getElementById('findpass');
 	var userName;
 	
 	text.addEventListener('input', ()=>{
