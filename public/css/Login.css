@@ -295,7 +295,7 @@ body .article h1 {
 .form {
   top: 50%;
   left: 50%;
-  width:400px;
+  width:300px;
   height: 220px;
 }
 body #findpass {
@@ -310,7 +310,7 @@ body #findpass {
 body .LOGO{
   margin: 0 auto;
   position: fixed;
-  width: 900px;
+  width: 500px;
   height: 300px;
   top: 10%;
   left: 15%;
@@ -437,9 +437,10 @@ body #findpass {
 .form {
   top: 200%;
   left: 50%;
-  width:500px;
+  width:400px;
   height: 100%;
 }
+
 body #findpass {
   text-align:center;
   top: 50%;

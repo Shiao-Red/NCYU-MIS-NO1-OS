@@ -1,6 +1,10 @@
 html, body{
 	margin:0px;
 	padding:0px;
+	background-image: url('../Image/background.png');
+}
+.body:not(.no_back){
+	
 }
 
 .main-table{
