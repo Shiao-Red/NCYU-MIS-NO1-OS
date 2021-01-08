@@ -2,23 +2,32 @@
 	margin: 0;
 	padding: 0;
 }
+html {
+	height:500px;
+}
 header {
-	background:  url(../Image/background.png);
 	height: 100vh;
 	-webkit-background-size: cover;
 	background-size: cover;
 	background-position: center center;
 	position: relative;
 }
+body {
+	background:  url(../Image/background.png);
+	background-repeat: no-repeat;
+}
 
-body .logo{
-	width: 900px;
-	height: 300px;
+body .logo img{
+	max-width: 800px;
+	max-height: 300px;
 	top: 10%;
 	left: 20%;
 	position: absolute;
 }
 
+body .space{
+	margin-top: 10%;
+}
 table{
 	width:100%;
 	margin-top:100px;
@@ -28,10 +37,94 @@ table{
 	display:block;
 	margin-left:auto;
 	margin-right:auto;
-	margin-top: 65%;
+	margin-top: 80%;
 	font-size:40px;
 	border: solid 5px white;
 	background:  rgba(0, 195, 255, 0.4);
 	cursor: pointer;
 }
 
+@media screen and (max-height:1366px) and (max-width:1024px){/*IPad Pro*/
+	body .space{
+		margin-top: 18%;
+	}
+}
+@media screen and (max-height:1024px) and (max-width:768px){ /*IPad*/
+	body {
+		background:  url(../Image/background.png);
+		background-repeat: no-repeat;
+	}
+
+	body .logo{
+		width: 600px;
+		height: 200px;
+		top: 10%;
+		left: 5%;
+		position: absolute;
+	}
+	body .space{
+		margin-top: 30%;
+	}
+	.selectButton{
+		display:block;
+		margin-left:80px;
+		margin-right:auto;
+		margin-top: 80%;
+		font-size:40px;
+		border: solid 5px white;
+		background:  rgba(0, 195, 255, 0.4);
+		cursor: pointer;
+	}
+}
+
+@media screen and (max-height:812px) and (max-width:375px){ /*Iphone X*/
+	body .space{
+		margin-top: 120%;
+	}
+	.selectButton{
+		display:block;
+		margin-left:auto;
+		margin-right:auto;
+		margin-top: 40%;
+		font-size:25px;
+		border: solid 3px white;
+		background:  rgba(0, 195, 255, 0.4);
+		cursor: pointer;
+	}
+	body .logo{
+		top: 10%;
+		left: -30%;
+		position: absolute;
+	}
+	body .logo img{
+		width: 395px;
+		height: 300px;
+	}
+
+}
+
+@media screen and (max-height:736px) and (max-width:414px){ /*Iphone 6/7/8 plus*/
+	body .space{
+		margin-top: 120%;
+	}
+	.selectButton{
+		display:block;
+		margin-left:auto;
+		margin-right:auto;
+		margin-top: 10%;
+		font-size:25px;
+		border: solid 3px white;
+		background:  rgba(0, 195, 255, 0.4);
+		cursor: pointer;
+	}
+	body .logo{
+		top: 10%;
+		left: -25%;
+		position: absolute;
+	}
+	body .logo img{
+		width: 395px;
+		height: 300px;
+	}
+
+}
