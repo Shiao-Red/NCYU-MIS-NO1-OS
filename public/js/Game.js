@@ -32,6 +32,8 @@
 
 	var isMouseActive=false;
 	
+	ctx.fillStyle="white";
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	
 	//起始位置
 	let x1 = 0;

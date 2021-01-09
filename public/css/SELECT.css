@@ -21,7 +21,7 @@ body .logo img{
 	max-width: 800px;
 	max-height: 300px;
 	top: 10%;
-	left: 20%;
+	left: 15%;
 	position: absolute;
 }
 
@@ -48,6 +48,13 @@ table{
 	body .space{
 		margin-top: 18%;
 	}
+	body .logo{
+		width: 600px;
+		height: 200px;
+		top: 10%;
+		left: 5%;
+		position: absolute;
+	}
 }
 @media screen and (max-height:1024px) and (max-width:768px){ /*IPad*/
 	body {
@@ -59,7 +66,7 @@ table{
 		width: 600px;
 		height: 200px;
 		top: 10%;
-		left: 5%;
+		left: -5%;
 		position: absolute;
 	}
 	body .space{
@@ -79,21 +86,21 @@ table{
 
 @media screen and (max-height:812px) and (max-width:375px){ /*Iphone X*/
 	body .space{
-		margin-top: 120%;
+		margin-top: 10%;
 	}
 	.selectButton{
 		display:block;
 		margin-left:auto;
 		margin-right:auto;
 		margin-top: 40%;
-		font-size:25px;
+		font-size:100px;
 		border: solid 3px white;
 		background:  rgba(0, 195, 255, 0.4);
 		cursor: pointer;
 	}
 	body .logo{
 		top: 10%;
-		left: -30%;
+		left: -40%;
 		position: absolute;
 	}
 	body .logo img{
@@ -119,12 +126,113 @@ table{
 	}
 	body .logo{
 		top: 10%;
-		left: -25%;
+		left: -15%;
 		position: absolute;
 	}
 	body .logo img{
 		width: 395px;
 		height: 300px;
+	}
+
+}
+
+@media screen and (max-height:667px) and (max-width:375px){ /*Iphone 6/7/8 */
+	body .space{
+		margin-top: 120%;
+	}
+	.selectButton{
+		display:block;
+		margin-left:auto;
+		margin-right:auto;
+		margin-top: 10%;
+		font-size:25px;
+		border: solid 3px white;
+		background:  rgba(0, 195, 255, 0.4);
+		cursor: pointer;
+	}
+	body .logo{
+		top: 10%;
+		left: -35%;
+		position: absolute;
+	}
+	body .logo img{
+		width: 395px;
+		height: 300px;
+	}
+
+}
+@media screen and (max-height:568px) and (max-width:320px){ /*Iphone 5/SE */
+	body .space{
+		margin-top: 120%;
+	}
+	.selectButton{
+		display:block;
+		margin-left:auto;
+		margin-right:auto;
+		margin-top: 10%;
+		font-size:20px;
+		border: solid 3px white;
+		background:  rgba(0, 195, 255, 0.4);
+		cursor: pointer;
+	}
+	body .logo{
+		top: 10%;
+		left: -40%;
+		position: absolute;
+	}
+	body .logo img{
+		width: 350px;
+		height: 250px;
+	}
+
+}
+@media screen and (max-height:823px) and (max-width:411px){ /*pixel 2XL plus*/
+	body .space{
+		margin-top: 120%;
+	}
+	.selectButton{
+		display:block;
+		margin-left:auto;
+		margin-right:auto;
+		margin-top: 10%;
+		font-size:25px;
+		border: solid 3px white;
+		background:  rgba(0, 195, 255, 0.4);
+		cursor: pointer;
+	}
+	body .logo{
+		top: 10%;
+		left: -15%;
+		position: absolute;
+	}
+	body .logo img{
+		width: 350px;
+		height: 250px;
+	}
+
+}
+@media screen and (max-height:640px) and (max-width:360px){ /*galaxy S5*/
+	body .space{
+		margin-top: 120%;
+	}
+	.selectButton{
+		display:block;
+		margin-left:auto;
+		margin-right:auto;
+		margin-top: 10%;
+		font-size:23px;
+		border: solid 3px white;
+		background:  rgba(0, 195, 255, 0.4);
+		cursor: pointer;
+	}
+	body .logo{
+		top: 10%;
+		left: -30%;
+		position: absolute;
+	}
+	body .logo img{
+		width: 350px;
+		height: 250px;
 	}
 
 }
