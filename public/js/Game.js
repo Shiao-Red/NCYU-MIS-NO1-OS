@@ -175,7 +175,7 @@
 		}
 		else{
 			arrowImage.style.transform='';
-			hostConfigBarDiv.style.top='-240px';
+			hostConfigBarDiv.style.top='-120px';
 		}
 	});
 	
