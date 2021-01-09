@@ -1,13 +1,13 @@
-﻿var cluster=require('cluster');
+﻿var cluster=require('cluster');//多執行序的東東
 
-if(cluster.isMaster) {
-	cluster.fork();
-	cluster.on('online', function(worker){
+if(cluster.isMaster){//是否為主程序
+	cluster.fork();//創造副程序
+	cluster.on('online', function(worker){ //有副程序被創建
 		console.log('Worker ' + worker.process.pid + ' is online.');
 	});
-	cluster.on('exit', function(worker, code, signal){
+	cluster.on('exit', function(worker, code, signal){//有副程序死亡
 		console.log('worker ' + worker.process.pid + ' died.');
-		cluster.fork();
+		cluster.fork();//再創建一個
 	});
 }
 else {

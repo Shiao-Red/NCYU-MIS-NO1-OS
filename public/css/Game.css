@@ -1,14 +1,10 @@
 html, body{
 	margin:0px;
 	padding:0px;
-<<<<<<< HEAD
-	background-image: url('../Image/background.png');
+	background-image: url(../Image/background.png);
 }
 .body:not(.no_back){
-	
-=======
 	background-image:url(../Image/background.png);
->>>>>>> 9a21eaea79bdc37e6922e74472f08fb5662014e4
 }
 
 .main-table{
