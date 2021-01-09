@@ -21,7 +21,7 @@ body .logo img{
 	max-width: 800px;
 	max-height: 300px;
 	top: 10%;
-	left: 15%;
+	left: 25%;
 	position: absolute;
 }
 
@@ -84,7 +84,7 @@ table{
 	}
 }
 
-@media screen and (max-height:812px) and (max-width:375px){ /*Iphone X*/
+@media screen and (max-height:812px) and (min-width:375px) and(max-width:375px){ /*Iphone X*/
 	body .space{
 		margin-top: 10%;
 	}
@@ -98,14 +98,13 @@ table{
 		background:  rgba(0, 195, 255, 0.4);
 		cursor: pointer;
 	}
-	body .logo{
-		top: 10%;
-		left: -40%;
-		position: absolute;
-	}
+
 	body .logo img{
 		width: 395px;
 		height: 300px;
+		top: 10%;
+		left: 10%;
+		position: absolute;
 	}
 
 }
@@ -124,14 +123,12 @@ table{
 		background:  rgba(0, 195, 255, 0.4);
 		cursor: pointer;
 	}
-	body .logo{
-		top: 10%;
-		left: -15%;
-		position: absolute;
-	}
 	body .logo img{
 		width: 395px;
 		height: 300px;
+		top: 10%;
+		left: 10%;
+		position: absolute;
 	}
 
 }
@@ -150,39 +147,12 @@ table{
 		background:  rgba(0, 195, 255, 0.4);
 		cursor: pointer;
 	}
-	body .logo{
-		top: 10%;
-		left: -35%;
-		position: absolute;
-	}
 	body .logo img{
 		width: 395px;
 		height: 300px;
-	}
-
-}
-@media screen and (max-height:568px) and (max-width:320px){ /*Iphone 5/SE */
-	body .space{
-		margin-top: 120%;
-	}
-	.selectButton{
-		display:block;
-		margin-left:auto;
-		margin-right:auto;
-		margin-top: 10%;
-		font-size:20px;
-		border: solid 3px white;
-		background:  rgba(0, 195, 255, 0.4);
-		cursor: pointer;
-	}
-	body .logo{
 		top: 10%;
-		left: -40%;
+		left: 10%;
 		position: absolute;
-	}
-	body .logo img{
-		width: 350px;
-		height: 250px;
 	}
 
 }
@@ -200,17 +170,40 @@ table{
 		background:  rgba(0, 195, 255, 0.4);
 		cursor: pointer;
 	}
-	body .logo{
+	body .logo img{
+		width: 350px;
+		height: 250px;
 		top: 10%;
-		left: -15%;
+		left: 10%;
 		position: absolute;
+	}
+
+}
+
+@media screen and (max-height:731px) and (max-width:411px){ /*pixe 2*/
+	body .space{
+		margin-top: 120%;
+	}
+	.selectButton{
+		display:block;
+		margin-left:auto;
+		margin-right:auto;
+		margin-top: 10%;
+		font-size:23px;
+		border: solid 3px white;
+		background:  rgba(0, 195, 255, 0.4);
+		cursor: pointer;
 	}
 	body .logo img{
 		width: 350px;
 		height: 250px;
+		top: 10%;
+		left: 10%;
+		position: absolute;
 	}
 
 }
+
 @media screen and (max-height:640px) and (max-width:360px){ /*galaxy S5*/
 	body .space{
 		margin-top: 120%;
@@ -225,14 +218,36 @@ table{
 		background:  rgba(0, 195, 255, 0.4);
 		cursor: pointer;
 	}
-	body .logo{
-		top: 10%;
-		left: -30%;
-		position: absolute;
-	}
 	body .logo img{
 		width: 350px;
 		height: 250px;
+		top: 10%;
+		left: 5%;
+		position: absolute;
+	}
+
+}
+@media screen and (height:568px) and (width:320px) { /*Iphone 5/SE */
+	body .space{
+		margin-top: 120%;
+	}
+	.selectButton{
+		display:block;
+		margin-left:auto;
+		margin-right:auto;
+		margin-top: 10%;
+		font-size:20px;
+		border: solid 3px white;
+		background:  rgba(0, 195, 255, 0.4);
+		cursor: pointer;
+	}
+
+	body .logo img{
+		width: 350px;
+		height: 250px;
+		top: 10%;
+		left: 0%;
+		position: absolute;
 	}
 
 }
